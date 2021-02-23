@@ -16,7 +16,7 @@ import (
 
 type Transaction struct {
 	XMLName   string `xml:"transaction"`
-	Id        uint32 `json:"id" xml:"id,attr"`
+	Id        uint32 `json:"id" xml:"id"`
 	From      string `json:"from" xml:"from"`
 	To        string `json:"to" xml:"to"`
 	Amount    uint32 `json:"amount" xml:"amount"`
@@ -24,8 +24,8 @@ type Transaction struct {
 }
 
 type Transactions struct {
-	XMLName      string `xml:"transactions"`
-	Transactions []Transaction
+	XMLName      string        `xml:"transactions"`
+	Transactions []Transaction `xml:"transaction"`
 }
 
 var (
@@ -200,7 +200,7 @@ func ImportFromJson(filePath string) ([]Transaction, error) {
 
 func ExportToXml(t []Transaction) error {
 	transactions := Transactions{Transactions: t}
-	encoded, err := xml.MarshalIndent(transactions, "", "   ")
+	encoded, err := xml.Marshal(transactions)
 	if err != nil {
 		log.Println(err)
 		return err

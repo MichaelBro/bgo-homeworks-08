@@ -32,22 +32,33 @@ func main() {
 		},
 	}
 
-	err := card.ExportToCsv(transactions)
-
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
 	fmt.Println(transactions)
 
-	transactionsByImport, err := card.ImportOfCsv("transactions.csv")
-
+	err := card.ExportToCsv(transactions)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	fmt.Println(transactionsByImport)
+	transactionsByCsv, err := card.ImportOfCsv("transactions.csv")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
+	fmt.Println(transactionsByCsv)
+
+	err = card.ExportToJson(transactions)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	transactionsByJson, err := card.ImportFromJson("transactions.json")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	fmt.Println(transactionsByJson)
 }

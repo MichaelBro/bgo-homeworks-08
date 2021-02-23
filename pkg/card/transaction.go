@@ -2,8 +2,10 @@ package card
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"errors"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"reflect"
@@ -11,16 +13,16 @@ import (
 )
 
 type Transaction struct {
-	Id        uint32
-	From      string
-	To        string
-	Amount    uint32
-	Timestamp uint32
+	Id        uint32 `json:"id"`
+	From      string `json:"from"`
+	To        string `json:"to"`
+	Amount    uint32 `json:"amount"`
+	Timestamp uint32 `json:"timestamp"`
 }
 
 var (
 	headStringSliceForCsv = []string{"Id", "From", "To", "Amount", "Timestamp"}
-	ErrWrongFile = errors.New("wrong file")
+	ErrWrongFile          = errors.New("wrong file")
 )
 
 func ExportToCsv(t []Transaction) error {
@@ -102,7 +104,7 @@ func ImportOfCsv(filePath string) ([]Transaction, error) {
 }
 
 func MapRowToTransaction(records [][]string) ([]Transaction, error) {
-	var transactions =  make([]Transaction, 0)
+	var transactions = make([]Transaction, 0)
 
 	for i, record := range records {
 		if i == 0 {
@@ -149,4 +151,41 @@ func StringSliceToTransaction(slice []string) (Transaction, error) {
 		Timestamp: uint32(timestamp),
 	}
 	return transaction, nil
+}
+
+func ExportToJson(t []Transaction) error {
+	jsonString, err := json.Marshal(t)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	err = ioutil.WriteFile("transactions.json", jsonString, os.ModePerm)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+func ImportFromJson(filePath string) ([]Transaction, error) {
+	file, err := ioutil.ReadFile(filePath)
+
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	var decoded []Transaction
+
+	err = json.Unmarshal(file, &decoded)
+
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return decoded, nil
 }

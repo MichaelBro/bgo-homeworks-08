@@ -13,11 +13,11 @@ import (
 )
 
 type Transaction struct {
-	Id        uint32 `json:"id" xml:"id"`
-	From      string `json:"from" xml:"from"`
-	To        string `json:"to" xml:"to"`
-	Amount    uint32 `json:"amount" xml:"amount"`
-	Timestamp uint32 `json:"timestamp" xml:"timestamp"`
+	Id        uint32 `json:"id"`
+	From      string `json:"from"`
+	To        string `json:"to"`
+	Amount    uint32 `json:"amount"`
+	Timestamp uint32 `json:"timestamp"`
 }
 
 var (

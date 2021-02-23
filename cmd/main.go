@@ -61,4 +61,19 @@ func main() {
 	}
 
 	fmt.Println(transactionsByJson)
+
+	err = card.ExportToXml(transactions)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	transactionsByXml, err := card.ImportFromXml("transactions.xml")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	fmt.Println(transactionsByXml)
+
 }

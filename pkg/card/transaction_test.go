@@ -32,7 +32,7 @@ func TestMapRowToTransaction(t *testing.T) {
 				},
 			},
 			want: []Transaction{
-				{0, "1111 1232 1111 2222", "2222 7874 7437 1111", 10000, 1613983040},
+				{Id: 0, From: "1111 1232 1111 2222", To: "2222 7874 7437 1111", Amount: 10000, Timestamp: 1613983040},
 			},
 			wantErr: false,
 		},
@@ -47,9 +47,9 @@ func TestMapRowToTransaction(t *testing.T) {
 				},
 			},
 			want: []Transaction{
-				{0, "1111 1232 1111 2222", "2222 7874 7437 1111", 10000, 1613983040},
-				{1, "2222 1232 2222 4444", "4444 7874 7437 2222", 20000, 1613989232},
-				{2, "3333 1232 3333 6666", "6666 7874 7437 3333", 30000, 1613989841},
+				{Id: 0, From: "1111 1232 1111 2222", To: "2222 7874 7437 1111", Amount: 10000, Timestamp: 1613983040},
+				{Id: 1, From: "2222 1232 2222 4444", To: "4444 7874 7437 2222", Amount: 20000, Timestamp: 1613989232},
+				{Id: 2, From: "3333 1232 3333 6666", To: "6666 7874 7437 3333", Amount: 30000, Timestamp: 1613989841},
 			},
 			wantErr: false,
 		},
@@ -61,7 +61,7 @@ func TestMapRowToTransaction(t *testing.T) {
 					{"0sff", "1111 1232 1111 2222", "2222 7874 7437 1111", "10000", "1613983040"},
 				},
 			},
-			want: nil,
+			want:    nil,
 			wantErr: true,
 		},
 		{
@@ -72,7 +72,7 @@ func TestMapRowToTransaction(t *testing.T) {
 					{"0", "1111 1232 1111 2222", "2222 7874 7437 1111", "10zxc000", "1613983040"},
 				},
 			},
-			want: nil,
+			want:    nil,
 			wantErr: true,
 		},
 		{
@@ -83,7 +83,7 @@ func TestMapRowToTransaction(t *testing.T) {
 					{"0", "1111 1232 1111 2222", "2222 7874 7437 1111", "10000", "161398qwe3040"},
 				},
 			},
-			want: nil,
+			want:    nil,
 			wantErr: true,
 		},
 		{
@@ -93,7 +93,7 @@ func TestMapRowToTransaction(t *testing.T) {
 					{"Id", "From", "To", "Amount", "Timestamp"},
 				},
 			},
-			want: make([]Transaction,0),
+			want:    make([]Transaction, 0),
 			wantErr: false,
 		},
 	}

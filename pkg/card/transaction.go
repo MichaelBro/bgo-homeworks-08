@@ -3,7 +3,9 @@ package card
 import (
 	"encoding/csv"
 	"encoding/json"
+	"encoding/xml"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -13,11 +15,17 @@ import (
 )
 
 type Transaction struct {
-	Id        uint32 `json:"id"`
-	From      string `json:"from"`
-	To        string `json:"to"`
-	Amount    uint32 `json:"amount"`
-	Timestamp uint32 `json:"timestamp"`
+	XMLName   string `xml:"transaction"`
+	Id        uint32 `json:"id" xml:"id"`
+	From      string `json:"from" xml:"from"`
+	To        string `json:"to" xml:"to"`
+	Amount    uint32 `json:"amount" xml:"amount"`
+	Timestamp uint32 `json:"timestamp" xml:"timestamp"`
+}
+
+type Transactions struct {
+	XMLName      string        `xml:"transactions"`
+	Transactions []Transaction `xml:"transaction"`
 }
 
 var (
@@ -188,4 +196,41 @@ func ImportFromJson(filePath string) ([]Transaction, error) {
 	}
 
 	return decoded, nil
+}
+
+func ExportToXml(t []Transaction) error {
+	transactions := Transactions{Transactions: t}
+	encoded, err := xml.Marshal(transactions)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	encoded = append([]byte(xml.Header), encoded...)
+	err = ioutil.WriteFile("transactions.xml", encoded, os.ModePerm)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+func ImportFromXml(filePath string) ([]Transaction, error) {
+	file, err := ioutil.ReadFile(filePath)
+
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	fmt.Println(string(file))
+	var decoded Transactions
+	err = xml.Unmarshal(file, &decoded)
+
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	return decoded.Transactions, nil
 }

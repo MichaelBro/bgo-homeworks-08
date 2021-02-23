@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bgo-homeworks-08/pkg/card"
 	"fmt"
+	"github.com/MichaelBro/bgo-homeworks-08/pkg/card"
 	"os"
 )
 
